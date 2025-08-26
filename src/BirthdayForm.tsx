@@ -44,8 +44,6 @@ const BirthdayForm: React.FC<BirthdayFormProps> = ({ onAddBirthday, birthdays}) 
     setDate('');
   }
 
-  console.log(birthdays)
-
   return (
     <>
       <form 

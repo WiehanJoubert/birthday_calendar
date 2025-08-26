@@ -40,9 +40,7 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
   .filter(b => new Date(b.date).getMonth() === currentMonth)
   .sort((a, b) => a.name.localeCompare(b.name));
 
-  console.log(monthsBirthdays)
-
-  const selected = new Date(selectedDate);
+  //const selected = new Date(selectedDate);
   //const selectedMonth = selected.getMonth() + 1;
   //const selectedDay = selected.getDate();
 
@@ -121,21 +119,19 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
                 {mntBirthday.map((b, index) =>(
                   <li key={index}>
                     {b.name}
-                    <button className='delete-btn' onClick={() => {
-                      if(confirm(`Delete birthday entry for ${b.name}?`)) {
-                        onDeleteBirthday(b.name, b.date);
-                        toast.done(`Deleted birthday for ${b.name}`);
-                      }
-                    }}>
-                      ❌
-                    </button>
+                    <button
+                    className="delete-btn"
+                    onClick={() => setConfirmDelete({ name: b.name, date: b.date })}
+                  >
+                    ❌
+                  </button>
                   </li>
                 ))}
               </ul>
             )}
           </div>
         )}
-        {selectedDate && monthsBirthdays.length > 0 && (
+        {!confirmDelete && selectedDate && monthsBirthdays.length > 0 && (
           <div>
             <h4>Birthdays this month:</h4>
             <ul>
@@ -154,23 +150,23 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
           </div>
         )}
         {confirmDelete && (
-      <div className="modal-backdrop">
-        <div className="modal">
-          <p>Delete birthday for {confirmDelete.name}?</p>
-          <button
-            onClick={() => {
-              onDeleteBirthday(confirmDelete.name, confirmDelete.date);
-              toast.success(`Deleted birthday for ${confirmDelete.name}`);
-              setConfirmDelete(null); // Close modal
-            }}
-            style={{ marginRight: '10px' }}
-          >
-            Yes
-          </button>
-          <button onClick={() => setConfirmDelete(null)}>Cancel</button>
-        </div>
-      </div>
-    )}
+          <div className="modal-backdrop">
+            <div className="modal">
+              <p>Delete birthday for {confirmDelete.name}?</p>
+              <button
+                onClick={() => {
+                  onDeleteBirthday(confirmDelete.name, confirmDelete.date);
+                  toast.success(`Deleted birthday for ${confirmDelete.name}`);
+                  setConfirmDelete(null); // Close modal
+                }}
+                style={{ marginRight: '10px' }}
+              >
+                Yes
+              </button>
+              <button onClick={() => setConfirmDelete(null)}>Cancel</button>
+            </div>
+          </div>
+        )}
       </div>    
     </div>
     
