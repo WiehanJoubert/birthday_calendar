@@ -8,7 +8,7 @@ function App() {
   // TODO: 1. Implement state management for birthdays - done
   const [birthdays, setBirthdays] = useState<{ name: string; date: string }[]>([])
 
-  // TODO: 2. Share state with BirthdayForm and BirthdayCalendar components
+  // TODO: 2. Share state with BirthdayForm and BirthdayCalendar components - done
   const addBirthday = (name: string, date: string) => {
     setBirthdays([...birthdays, { name, date }])
   }
@@ -17,7 +17,7 @@ function App() {
     setBirthdays(birthdays.filter(b => b.name !== name || b.date !== date))
   }
 
-  // TIP: The birthday added from the BirthdayForm component should be consumed in the BirthdayCalendar component.
+  // TIP: The birthday added from the BirthdayForm component should be consumed in the BirthdayCalendar component. - done
   return (
     <>
       <h1>Birthday Calendar App</h1>

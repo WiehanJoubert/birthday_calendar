@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 // TODO: Bonus - Implement birthdays type interface - done
 interface birthday {
   name: string;
-  date: string; // in yyyy-mm-dd format
+  date: string;
 }
 interface BirthdayCalendarProps {
   birthdays: birthday[];
@@ -27,22 +27,16 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
     return `${currentYear}-${mm}-${dd}`;
   };
 
-  const hasBirthday = (dateStr: string) => {
-    const target = dateStr.slice(5);
-    return birthdays.some(b => b.date.slice(5) === target);
-  };
-
-  const mntBirthday = birthdays
+  //Seacrhing for birthdays on the selected day
+  const dayBirthday = birthdays
   .filter(b => b.date.slice(5) === selectedDate.slice(5))
   .sort((a, b) => a.name.localeCompare(b.name));
   
+  //Searching for birthday in the selected month
   const monthsBirthdays = birthdays
   .filter(b => new Date(b.date).getMonth() === currentMonth)
   .sort((a, b) => a.name.localeCompare(b.name));
 
-  //const selected = new Date(selectedDate);
-  //const selectedMonth = selected.getMonth() + 1;
-  //const selectedDay = selected.getDate();
 
   // Month navigation handlers
   const handlePrevMonth = () => {
@@ -84,7 +78,6 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
           const day = i + 1;
           const dateStr = formatDate(day);
           const isSelected = selectedDate === dateStr;
-          //const isBirthday = hasBirthday(dateStr);
           return (
             <button
               key={dateStr}
@@ -110,13 +103,13 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
         {selectedDate && (
           <div>
               <h4>Birthdays for date selected below :</h4>
-              {mntBirthday.length === 0 ? (
+              {dayBirthday.length === 0 ? (
                 <p>No birthdays</p>
               )
             :
             (
               <ul>
-                {mntBirthday.map((b, index) =>(
+                {dayBirthday.map((b, index) =>(
                   <li key={index}>
                     {b.name}
                     <button
@@ -149,6 +142,7 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
             </ul>
           </div>
         )}
+        {/* Delete button with confimation */}
         {confirmDelete && (
           <div className="modal-backdrop">
             <div className="modal">

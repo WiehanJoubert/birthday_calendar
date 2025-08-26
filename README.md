@@ -19,4 +19,4 @@ Welcome to the React Developer Test! This project is designed to assess your ski
     - Added styling, colours of calender background of selceted dates, delete buttons and for the birthday list.
 
 ### 
-    - Thank you for the oppertunity
+    - Thank you for the opportunity
