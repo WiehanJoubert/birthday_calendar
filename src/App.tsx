@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import BirthdayForm from './BirthdayForm'
 import BirthdayCalendar from './BirthdayCalendar'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   // TODO: 1. Implement state management for birthdays - done
@@ -22,6 +23,7 @@ function App() {
       <h1>Birthday Calendar App</h1>
       <BirthdayForm onAddBirthday={addBirthday} birthdays={birthdays}/>
       <BirthdayCalendar birthdays={birthdays} onDeleteBirthday={removeBirthday}/>
+      <ToastContainer/>
     </>
   )
 }

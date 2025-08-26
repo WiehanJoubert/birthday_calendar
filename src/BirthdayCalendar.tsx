@@ -64,7 +64,7 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
         <span style={{ margin: '0 12px' }}>{monthNames[currentMonth]} {currentYear}</span>
         <button onClick={handleNextMonth}>&gt;</button>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 6, marginBottom: 32 }}>
         {[...Array(daysInMonth)].map((_, i) => {
           const dateStr = formatDate(i + 1);
           return (
