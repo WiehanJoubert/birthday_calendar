@@ -27,12 +27,11 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
     return `${currentYear}-${mm}-${dd}`;
   };
 
-  //Seacrhing for birthdays on the selected day
+  // Filtering birthdays that match the selected month and day (ignores the year)
   const dayBirthday = birthdays
   .filter(b => b.date.slice(5) === selectedDate.slice(5))
   .sort((a, b) => a.name.localeCompare(b.name));
   
-  //Searching for birthday in the selected month
   const monthsBirthdays = birthdays
   .filter(b => new Date(b.date).getMonth() === currentMonth)
   .sort((a, b) => a.name.localeCompare(b.name));
