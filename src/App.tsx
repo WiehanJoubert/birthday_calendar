@@ -4,15 +4,24 @@ import BirthdayForm from './BirthdayForm'
 import BirthdayCalendar from './BirthdayCalendar'
 
 function App() {
-  // TODO: 1. Implement state management for birthdays
+  // TODO: 1. Implement state management for birthdays - done
+  const [birthdays, setBirthdays] = useState<{ name: string; date: string }[]>([])
+
   // TODO: 2. Share state with BirthdayForm and BirthdayCalendar components
+  const addBirthday = (name: string, date: string) => {
+    setBirthdays([...birthdays, { name, date }])
+  }
+
+  const removeBirthday = (name: string, date: string) => {
+    setBirthdays(birthdays.filter(b => b.name !== name || b.date !== date))
+  }
 
   // TIP: The birthday added from the BirthdayForm component should be consumed in the BirthdayCalendar component.
   return (
     <>
       <h1>Birthday Calendar App</h1>
-      <BirthdayForm />
-      <BirthdayCalendar />
+      <BirthdayForm onAddBirthday={addBirthday} birthdays={birthdays}/>
+      <BirthdayCalendar birthdays={birthdays} onDeleteBirthday={removeBirthday}/>
     </>
   )
 }

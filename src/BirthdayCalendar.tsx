@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 
-// TODO: Bonus - Implement birthdays type interface
+// TODO: Bonus - Implement birthdays type interface - done
+interface birthday {
+  name: string;
+  date: string; // in yyyy-mm-dd format
+}
 interface BirthdayCalendarProps {
-  birthdays: any[];
+  birthdays: birthday[];
+  onDeleteBirthday: (name: string, date: string) => void;
 }
 
-const BirthdayCalendar: React.FC<BirthdayCalendarProps> = () => {
+const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteBirthday}) => {
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
@@ -67,10 +72,11 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = () => {
               key={dateStr}
               style={{
                 padding: 8,
-                background: selectedDate === dateStr ? '#b3e5fc' : '#fff',
+                background: selectedDate === dateStr ? '#0DB14B' : '#fff',
                 border: '1px solid #ccc',
                 borderRadius: 4,
                 cursor: 'pointer',
+                color: selectedDate === dateStr ? '#fff' : '#000'
               }}
               onClick={() => setSelectedDate(dateStr)}
             >

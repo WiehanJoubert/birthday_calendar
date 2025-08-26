@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 
-interface BirthdayFormProps {
-  onAddBirthday: (name: string, date: string) => void;
+interface birthday {
+  name: string;
+  date: string; // in yyyy-mm-dd format
 }
 
-const BirthdayForm: React.FC<BirthdayFormProps> = () => {
+interface BirthdayFormProps {
+  onAddBirthday: (name: string, date: string) => void;
+  birthdays: birthday[];
+}
+
+const BirthdayForm: React.FC<BirthdayFormProps> = ({ onAddBirthday, birthdays}) => {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
 
