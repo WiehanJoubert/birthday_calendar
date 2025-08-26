@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 // TODO: Bonus - Implement birthdays type interface - done
 interface birthday {
@@ -11,6 +12,7 @@ interface BirthdayCalendarProps {
 }
 
 const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteBirthday}) => {
+  const [confirmDelete, setConfirmDelete] = useState<null | { name: string; date: string }>(null);
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
@@ -25,9 +27,24 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
     return `${currentYear}-${mm}-${dd}`;
   };
 
+  const hasBirthday = (dateStr: string) => {
+    const target = dateStr.slice(5);
+    return birthdays.some(b => b.date.slice(5) === target);
+  };
+
+  const mntBirthday = birthdays
+  .filter(b => b.date.slice(5) === selectedDate.slice(5))
+  .sort((a, b) => a.name.localeCompare(b.name));
+  
+  const monthsBirthdays = birthdays
+  .filter(b => new Date(b.date).getMonth() === currentMonth)
+  .sort((a, b) => a.name.localeCompare(b.name));
+
+  console.log(monthsBirthdays)
+
   const selected = new Date(selectedDate);
-  const selectedMonth = selected.getMonth() + 1;
-  const selectedDay = selected.getDate();
+  //const selectedMonth = selected.getMonth() + 1;
+  //const selectedDay = selected.getDate();
 
   // Month navigation handlers
   const handlePrevMonth = () => {
@@ -64,32 +81,99 @@ const BirthdayCalendar: React.FC<BirthdayCalendarProps> = ({birthdays, onDeleteB
         <span style={{ margin: '0 12px' }}>{monthNames[currentMonth]} {currentYear}</span>
         <button onClick={handleNextMonth}>&gt;</button>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 6, marginBottom: 32 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2, marginBottom: 32 }}>
         {[...Array(daysInMonth)].map((_, i) => {
-          const dateStr = formatDate(i + 1);
+          const day = i + 1;
+          const dateStr = formatDate(day);
+          const isSelected = selectedDate === dateStr;
+          //const isBirthday = hasBirthday(dateStr);
           return (
             <button
               key={dateStr}
               style={{
                 padding: 8,
-                background: selectedDate === dateStr ? '#0DB14B' : '#fff',
+                background: isSelected ? '#0DB14B' : '#fff',
                 border: '1px solid #ccc',
                 borderRadius: 4,
                 cursor: 'pointer',
-                color: selectedDate === dateStr ? '#fff' : '#000'
+                color: isSelected ? '#fff' : '#000'
               }}
               onClick={() => setSelectedDate(dateStr)}
             >
-              {i + 1}
+              {day}
+              
             </button>
           );
         })}
       </div>
-      <div>
+      <div style={{textAlign: "left"}}>
         <strong>{selectedDate && new Date(selectedDate).toLocaleDateString()}</strong>
         {/* TODO: Show birthdays for this date that was added from the BirthdayForm component. */}
+        {selectedDate && (
+          <div>
+              <h4>Birthdays for date selected below :</h4>
+              {mntBirthday.length === 0 ? (
+                <p>No birthdays</p>
+              )
+            :
+            (
+              <ul>
+                {mntBirthday.map((b, index) =>(
+                  <li key={index}>
+                    {b.name}
+                    <button className='delete-btn' onClick={() => {
+                      if(confirm(`Delete birthday entry for ${b.name}?`)) {
+                        onDeleteBirthday(b.name, b.date);
+                        toast.done(`Deleted birthday for ${b.name}`);
+                      }
+                    }}>
+                      ❌
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+        {selectedDate && monthsBirthdays.length > 0 && (
+          <div>
+            <h4>Birthdays this month:</h4>
+            <ul>
+              {monthsBirthdays.map((b, index) => (
+                <li key={index}>
+                  {b.name} ({new Date(b.date).getDate()})
+                  <button
+                    className="delete-btn"
+                    onClick={() => setConfirmDelete({ name: b.name, date: b.date })}
+                  >
+                    ❌
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {confirmDelete && (
+      <div className="modal-backdrop">
+        <div className="modal">
+          <p>Delete birthday for {confirmDelete.name}?</p>
+          <button
+            onClick={() => {
+              onDeleteBirthday(confirmDelete.name, confirmDelete.date);
+              toast.success(`Deleted birthday for ${confirmDelete.name}`);
+              setConfirmDelete(null); // Close modal
+            }}
+            style={{ marginRight: '10px' }}
+          >
+            Yes
+          </button>
+          <button onClick={() => setConfirmDelete(null)}>Cancel</button>
+        </div>
       </div>
+    )}
+      </div>    
     </div>
+    
   );
 };
 

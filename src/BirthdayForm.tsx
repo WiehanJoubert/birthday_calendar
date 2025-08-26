@@ -20,17 +20,31 @@ const BirthdayForm: React.FC<BirthdayFormProps> = ({ onAddBirthday, birthdays}) 
 
     // Input validation for name and date
     const nameRegex = /^[a-zA-Z\s'-]+$/;
-    if (!nameRegex.test(name) || !name.trim() || !date) {
+    if (!nameRegex.test(name) || !name.trim().toLowerCase || !date) {
       toast.error('Please proide a valid name that only contains letters, spaces, hyphens, or apostrophes, and a valid date.');
       return;
     }
 
+    //Seeing if there is an existing entry on the calender with the same name
+    const existingBday = birthdays.some(
+      b => b.name.trim().toLowerCase() === name.trim().toLowerCase()
+    );
+    if (existingBday){
+      toast.error(`${name} was already added on the ${date}`)
+      return;
+    }
+
+
     onAddBirthday(name, date);
     //Added a toast notification on successful addition of birthday
-    toast.success(`${name.trim()}'s birthday added successfully!'`);
+    if(!existingBday){
+      toast.success(`${name.trim()}'s birthday added successfully!'`);
+    }
     setName('');
     setDate('');
   }
+
+  console.log(birthdays)
 
   return (
     <>
@@ -44,14 +58,16 @@ const BirthdayForm: React.FC<BirthdayFormProps> = ({ onAddBirthday, birthdays}) 
           value={name}
           onChange={e => setName(e.target.value)}
           required
+          style={{ height: '36px', marginRight : "0.7rem" }}
         />
         <input
           type="date"
           value={date}
           onChange={e => setDate(e.target.value)}
           required
+          style={{ height: '36px' }}
         />
-        <button type="submit">Add Birthday</button>
+        <button style={{marginLeft : "0.7rem"}} type="submit">Add Birthday</button>
       </form>
     </>
   );

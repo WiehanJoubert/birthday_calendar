@@ -54,6 +54,33 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.delete-btn{
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 1em;
+  font-size: 0.5em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  margin-left: 1rem;
+}
+
+.delete-btn:hover{
+  border-color: #FC618A;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul li::before {
+  content: '🎂 ';
+  margin-right: 8px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
